@@ -1,0 +1,33 @@
+services:
+
+  postgres:
+    image: postgres:17
+    container_name: cloud-postgres
+    environment:
+      POSTGRES_DB: cloudstorage
+      POSTGRES_USER: cloud_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: .
+    image: cloudstorage-backend:dev
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/cloudstorage
+      SPRING_DATASOURCE_USERNAME: cloud_user
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+
+volumes:
+  postgres_data:
+
+
+
+
+

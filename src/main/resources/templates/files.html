@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Мои файлы — CloudStorage</title>
+    <link rel="stylesheet" th:href="@{/css/files.css}">
+</head>
+<body>
+
+<div class="layout">
+
+    <header class="header">
+        <a class="brand" th:href="@{/files}">
+            <span class="brand-icon">CS</span>
+            <span>CloudStorage</span>
+        </a>
+
+        <div class="account">
+            <span class="username" th:text="${username}">Пользователь</span>
+
+            <form method="post" th:action="@{/logout}">
+                <button class="logout-btn" type="submit">Выйти</button>
+            </form>
+        </div>
+    </header>
+
+    <main class="content">
+
+        <div class="page-heading">
+            <div>
+                <h1>Мои файлы</h1>
+                <p>Управляйте файлами в личном хранилище.</p>
+            </div>
+            <span class="private-tag">Личное пространство</span>
+        </div>
+
+        <section class="panel upload-panel">
+            <div class="panel-title">
+                <h2>Загрузка файла</h2>
+                <p>Выберите файл для загрузки.</p>
+            </div>
+
+            <form class="upload-form"
+                  method="post"
+                  enctype="multipart/form-data"
+                  th:action="@{/files/upload}">
+
+                <input type="file"
+                       id="file"
+                       name="file"
+                       required>
+
+                <button class="primary-btn" type="submit">
+                    Загрузить
+                </button>
+            </form>
+        </section>
+
+        <section class="panel files-panel">
+
+            <div class="files-heading">
+                <h2>Хранилище</h2>
+                <span class="file-count"
+                      th:text="${files == null ? 0 : #lists.size(files)} + ' файлов'">
+                    0 файлов
+                </span>
+            </div>
+
+            <div class="empty-state"
+                 th:if="${files == null or #lists.isEmpty(files)}">
+                <div class="empty-icon">☁</div>
+                <h3>Пока здесь пусто</h3>
+                <p>Загрузите первый файл, чтобы он появился здесь.</p>
+            </div>
+
+            <div class="table-wrap"
+                 th:if="${files != null and not #lists.isEmpty(files)}">
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Название</th>
+                        <th>Размер</th>
+                        <th>Дата загрузки</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="file : ${files}">
+                        <td>
+                            <div class="file-name">
+                                <span class="file-icon">▣</span>
+                                <span th:text="${file.name}">document.pdf</span>
+                            </div>
+                        </td>
+
+                        <td th:text="${file.sizeLabel}">2.4 МБ</td>
+
+                        <td th:text="${file.uploadedAtLabel}">
+                            19.10.2026
+                        </td>
+
+                        <td>
+                            <a class="download-link"
+                               th:href="@{/files/{id}/download(id=${file.id})}">
+                                Скачать
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </section>
+
+    </main>
+</div>
+
+</body>
+</html>
