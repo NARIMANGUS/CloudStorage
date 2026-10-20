@@ -28,6 +28,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/cloudstorage
       SPRING_DATASOURCE_USERNAME: cloud_user
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
+      SERVER_FORWARD_HEADERS_STRATEGY: framework
+      SERVER_SERVLET_SESSION_TRACKING_MODES: cookie
     volumes:
       - storage_data:/app/storage
 
