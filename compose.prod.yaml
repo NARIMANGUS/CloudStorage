@@ -16,7 +16,8 @@ services:
       retries: 15
 
   backend:
-    image: ghcr.io/narimangus/cloudstorage:latest
+    image: cloudstorage-backend:ci
+    pull_policy: never
     restart: unless-stopped
     ports:
       - "127.0.0.1:8080:8080"
